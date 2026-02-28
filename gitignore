@@ -33,6 +33,12 @@ replay_pid*
 .mtj.tmp/
 
 # ===============================
+# Datos locales de la aplicación
+# ===============================
+# Excluir la base de datos de texto para que el repo esté limpio
+/data/
+
+# ===============================
 # Directorios de compilación y construcción
 # ===============================
 # Directorios comunes de compilación
