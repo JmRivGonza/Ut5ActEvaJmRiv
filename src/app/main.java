@@ -6,13 +6,13 @@ import service.AuthService;
 import service.NotaService;
 import java.util.Scanner;
 
-public class Main {
+public class main {
     private static Scanner sc = new Scanner(System.in);
     private static AuthService authService = new AuthService();
     private static Usuario usuarioActual = null;
     private static NotaService notaService = null;
 
-    public static void main(String[] args) {
+    public static void Main(String[] args) {
         while (true) {
             if (usuarioActual == null) {
                 if (menuPrincipal()) {
