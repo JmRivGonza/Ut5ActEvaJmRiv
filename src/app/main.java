@@ -6,12 +6,23 @@ import service.AuthService;
 import service.NotaService;
 import java.util.Scanner;
 
+/**
+ * Clase principal que gestiona la interfaz de consola y el flujo de la
+ * aplicación.
+ * 
+ * @author Jonay Rivero
+ * @version 1.0
+ */
+
 public class main {
     private static Scanner sc = new Scanner(System.in);
     private static AuthService authService = new AuthService();
     private static Usuario usuarioActual = null;
     private static NotaService notaService = null;
 
+    /**
+     * Punto de entrada del programa: controla el bucle principal de navegación.
+     */
     public static void Main(String[] args) {
         while (true) {
             if (usuarioActual == null) {
@@ -25,6 +36,12 @@ public class main {
         System.out.println("Programa finalizado.");
     }
 
+    /**
+     * Gestiona las opciones para usuarios no identificados (Login, Registro,
+     * Salir).
+     * 
+     * @return true si el usuario elige salir del programa.
+     */
     private static boolean menuPrincipal() {
         System.out.println("\n====================");
         System.out.println("   Menú Principal   ");
@@ -51,6 +68,9 @@ public class main {
         return false;
     }
 
+    /**
+     * Solicita credenciales y valida el acceso del usuario.
+     */
     private static void iniciarSesion() {
         System.out.println("\n==================");
         System.out.println("  Iniciar Sesión  ");
@@ -60,6 +80,7 @@ public class main {
         System.out.print("Introduce la contraseña: ");
         String contraseña = sc.nextLine();
 
+        // Validacion de que los campos no esten vacios
         if (email.isBlank() || contraseña.isBlank()) {
             System.out.println("Error: El email y la contraseña no pueden estar vacios");
             return;
@@ -68,7 +89,8 @@ public class main {
         try {
             Usuario usuario = authService.login(email, contraseña);
             if (usuario != null) {
-                usuarioActual = usuario;
+                // Si el login es correcto, se establece la sesión y se inicializa el servicio
+                // de notas usuarioActual = usuario;
                 notaService = new NotaService(usuario);
                 System.out.println("Inicio de sesión exitoso, bienvenido " + usuario.getEmail());
             } else {
@@ -79,6 +101,9 @@ public class main {
         }
     }
 
+    /**
+     * Gestiona el proceso de creación de una nueva cuenta de usuario.
+     */
     private static void registrarse() {
         boolean completado = false;
         while (!completado) {
@@ -90,17 +115,25 @@ public class main {
             System.out.println("\n--REGISTRO : (Escribe 'salir' para volver al menu principal)--");
             System.out.print("Introduce el email: ");
             email = sc.nextLine();
+
+            // Permite al usuario cancelar el registro
             if (email.equalsIgnoreCase("salir")) {
                 return;
             }
             System.out.print("Introduce la contraseña: ");
             contraseña = sc.nextLine();
+
+            // Intenta registrar el usuario a través del servicio de autenticación
             if (authService.registrar(email, contraseña)) {
                 completado = true;
             }
         }
     }
 
+    /**
+     * Muestra el menú de opciones para el usuario autenticado y gestiona la
+     * navegación entre las diferentes funcionalidades.
+     */
     private static void menuUsuario() {
         System.out.println("\n==================");
         System.out.println("   Menú Usuario   ");
@@ -117,6 +150,7 @@ public class main {
 
         switch (opcion) {
             case "1":
+                // Lógica para capturar datos y crear una nueva nota
                 System.out.println("\n=== Has elegido 'crear nota' ===");
                 System.out.println("\nIntroduce el titulo de la nota: ");
                 String titulo = sc.nextLine();
@@ -125,6 +159,7 @@ public class main {
                 notaService.crearNota(new Nota(titulo, contenido));
                 break;
             case "2":
+                // Muestra todas las notas del usuario actual
                 System.out.println("\n=== Has elegido 'listar notas' ===");
                 notaService.listarNotas();
                 break;
@@ -140,6 +175,7 @@ public class main {
 
                 break;
             case "4":
+                // Elimina una nota específica validando que el ID sea numérico
                 System.out.println("\n=== Has elegido 'eliminar nota' ===");
                 try {
                     System.out.println("\nIntroduce el número de la nota: ");
@@ -150,12 +186,14 @@ public class main {
                 }
                 break;
             case "5":
+                // Filtra las notas por un texto contenido en el título o cuerpo
                 System.out.println("\n=== Has elegido 'buscar nota por palabra clave' ===");
                 System.out.println("\nIntroduce la palabra clave: ");
                 String palabraClave = sc.nextLine();
                 notaService.buscarNota(palabraClave);
                 break;
             case "0":
+                // Limpia la sesión actual para volver al menú principal
                 usuarioActual = null;
                 notaService = null;
                 System.out.println("Has cerrado sesion...");
