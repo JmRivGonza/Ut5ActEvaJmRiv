@@ -109,6 +109,7 @@ public class main {
         System.out.println("2. Listar notas");
         System.out.println("3. Ver nota por número");
         System.out.println("4. Eliminar nota");
+        System.out.println("5. Buscar nota por palabra clave");
         System.out.println("0. Cerrar sesión");
         System.out.println("==================");
         System.out.print("Selecciona una opción: ");
@@ -147,6 +148,12 @@ public class main {
                 } catch (NumberFormatException e) {
                     System.out.println("Error: Debes introducir un numero valido");
                 }
+                break;
+            case "5":
+                System.out.println("\n=== Has elegido 'buscar nota por palabra clave' ===");
+                System.out.println("\nIntroduce la palabra clave: ");
+                String palabraClave = sc.nextLine();
+                notaService.buscarNota(palabraClave);
                 break;
             case "0":
                 usuarioActual = null;

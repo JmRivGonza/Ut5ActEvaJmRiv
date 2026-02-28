@@ -28,30 +28,30 @@ public class NotaService {
     }
 
     public void crearNota(Nota nota) {
-    if (nota == null || nota.getTitulo().isBlank() || nota.getContenido().isBlank()) {
-        System.out.println("Error: La nota no puede estar vacia");
-        return;
-    }
-
-    try {
-        // 1) Leer notas actuales
-        List<String> notasExistentes = Files.readAllLines(notasFile);
-        
-        // 2) Modificar la lista en memoria añadiendo la nueva
-        notasExistentes.add(nota.toString());
-        
-        // 3) Reescribir el fichero completo (sobrescribir)
-        try (BufferedWriter writer = Files.newBufferedWriter(notasFile)) {
-            for (String n : notasExistentes) {
-                writer.write(n);
-                writer.newLine();
-            }
+        if (nota == null || nota.getTitulo().isBlank() || nota.getContenido().isBlank()) {
+            System.out.println("Error: La nota no puede estar vacia");
+            return;
         }
-        System.out.println("Nota creada exitosamente");
-    } catch (IOException e) {
-        System.out.println("Error al crear la nota: " + e.getMessage());
+
+        try {
+            // 1) Leer notas actuales
+            List<String> notasExistentes = Files.readAllLines(notasFile);
+
+            // 2) Modificar la lista en memoria añadiendo la nueva
+            notasExistentes.add(nota.toString());
+
+            // 3) Reescribir el fichero completo (sobrescribir)
+            try (BufferedWriter writer = Files.newBufferedWriter(notasFile)) {
+                for (String n : notasExistentes) {
+                    writer.write(n);
+                    writer.newLine();
+                }
+            }
+            System.out.println("Nota creada exitosamente");
+        } catch (IOException e) {
+            System.out.println("Error al crear la nota: " + e.getMessage());
+        }
     }
-}
 
     public void listarNotas() {
         try {
@@ -108,4 +108,25 @@ public class NotaService {
         }
     }
 
+    public void buscarNota(String palabraClave) {
+        try {
+            List<String> lineas = Files.readAllLines(notasFile);
+            boolean encontrado = false;
+            for (int i = 0; i < lineas.size(); i++) {
+                String[] partes = lineas.get(i).split(";");
+                if (partes.length == 2 && (partes[0].contains(palabraClave) || partes[1].contains(palabraClave))) {
+                    System.out.println("\n=== [COINCIDENCIA] Nota numero " + (i + 1) + " ===");
+                    System.out.println("Titulo: " + partes[0]);
+                    System.out.println("Contenido: " + partes[1]);
+                    System.out.println("===============================");
+                    encontrado = true;
+                }
+            }
+            if (!encontrado) {
+                System.out.println("No se han encontrado notas con la palabra clave: " + palabraClave);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al buscar la nota" + e.getMessage());
+        }
+    }
 }
