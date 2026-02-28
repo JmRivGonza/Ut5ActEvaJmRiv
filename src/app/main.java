@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @version 1.0
  */
 
-public class main {
+public class Main {
     private static Scanner sc = new Scanner(System.in);
     private static AuthService authService = new AuthService();
     private static Usuario usuarioActual = null;
@@ -23,7 +23,7 @@ public class main {
     /**
      * Punto de entrada del programa: controla el bucle principal de navegación.
      */
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
         while (true) {
             if (usuarioActual == null) {
                 if (menuPrincipal()) {
@@ -90,7 +90,8 @@ public class main {
             Usuario usuario = authService.login(email, contraseña);
             if (usuario != null) {
                 // Si el login es correcto, se establece la sesión y se inicializa el servicio
-                // de notas usuarioActual = usuario;
+                // de notas 
+                usuarioActual = usuario;
                 notaService = new NotaService(usuario);
                 System.out.println("Inicio de sesión exitoso, bienvenido " + usuario.getEmail());
             } else {
